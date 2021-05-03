@@ -22,7 +22,7 @@ namespace codebus.apigateway.core.GatewayConfigurationRepository
 
         public async Task<Response<FileConfiguration>> Get()
         {
-           var  _gatewayDbContext = _serviceProvider.CreateScope().ServiceProvider.GetRequiredService<GatewayDbContext>();
+            var _gatewayDbContext = _serviceProvider.CreateScope().ServiceProvider.GetRequiredService<GatewayDbContext>();
             var dbGlobalConfig = _gatewayDbContext.GlobalConfiguration.Where(x => x.Enable).FirstOrDefault();
 
             if (dbGlobalConfig == null)
