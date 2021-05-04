@@ -1,5 +1,4 @@
-﻿using codebus.apigateway.core.Entities;
-using Ocelot.Configuration.File;
+﻿using Ocelot.Configuration.File;
 using Ocelot.Configuration.Repository;
 using Ocelot.Responses;
 using System;
@@ -8,16 +7,21 @@ using System.Threading.Tasks;
 using System.Linq;
 using Newtonsoft.Json;
 using Microsoft.Extensions.DependencyInjection;
+using codebus.apigateway.core.DbRepository;
+using codebus.apigateway.core.DbRepository.Entities;
+using Ocelot.Configuration.ChangeTracking;
 
-namespace codebus.apigateway.core.GatewayConfigurationRepository
+namespace codebus.apigateway.core.OcelotAddin
 {
     public class MySqlFileConfigurationRepository : IFileConfigurationRepository
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly IOcelotConfigurationChangeTokenSource _changeTokenSource;
 
         public MySqlFileConfigurationRepository(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
+            _changeTokenSource = serviceProvider.GetRequiredService<IOcelotConfigurationChangeTokenSource>();
         }
 
         public async Task<Response<FileConfiguration>> Get()
@@ -130,7 +134,7 @@ namespace codebus.apigateway.core.GatewayConfigurationRepository
                 fileAggregate.ReRouteIsCaseSensitive = aggregate.ReRouteIsCaseSensitive;
                 fileAggregate.Aggregator = aggregate.Aggregator;
                 fileAggregate.Priority = aggregate.Priority;
-                
+
                 fileConfiguration.Aggregates.Add(fileAggregate);
             }
 
@@ -142,6 +146,92 @@ namespace codebus.apigateway.core.GatewayConfigurationRepository
 
         public async Task<Response> Set(FileConfiguration fileConfiguration)
         {
+            if (fileConfiguration == null)
+                throw new Exception("未监测到任何可用的配置信息");
+            if (string.IsNullOrEmpty(fileConfiguration.GlobalConfiguration.BaseUrl))
+                throw new Exception("BaseUrl不可为空");
+
+            var _gatewayDbContext = _serviceProvider.CreateScope().ServiceProvider.GetRequiredService<GatewayDbContext>();
+
+            var dbGlobalConfigs = _gatewayDbContext.GlobalConfiguration.Where(x => x.Enable).ToList();
+            dbGlobalConfigs.ForEach(x =>
+            {
+                x.Enable = false;
+                x.ReRoutes.ForEach(m => m.Enable = false);
+            });
+            _gatewayDbContext.GlobalConfiguration.UpdateRange(dbGlobalConfigs);
+
+            // Globalconfig
+            var dbGlobalConfig = new GlobalConfiguration();
+            dbGlobalConfig.Id = Guid.NewGuid().ToString("N");
+            dbGlobalConfig.CreatedTime = DateTime.Now;
+            dbGlobalConfig.Enable = true;
+            dbGlobalConfig.BaseUrl = fileConfiguration.GlobalConfiguration.BaseUrl;
+            dbGlobalConfig.DownstreamScheme = fileConfiguration.GlobalConfiguration.DownstreamScheme;
+            dbGlobalConfig.RequestIdKey = fileConfiguration.GlobalConfiguration.RequestIdKey;
+            dbGlobalConfig.DownstreamHttpVersion = fileConfiguration.GlobalConfiguration.DownstreamHttpVersion;
+            dbGlobalConfig.HttpHandlerOptions = JsonConvert.SerializeObject(fileConfiguration.GlobalConfiguration.HttpHandlerOptions);
+            dbGlobalConfig.LoadBalancerOptions = JsonConvert.SerializeObject(fileConfiguration.GlobalConfiguration.LoadBalancerOptions);
+            dbGlobalConfig.QoSOptions = JsonConvert.SerializeObject(fileConfiguration.GlobalConfiguration.QoSOptions);
+            dbGlobalConfig.ServiceDiscoveryProvider = JsonConvert.SerializeObject(fileConfiguration.GlobalConfiguration.ServiceDiscoveryProvider);
+            dbGlobalConfig.RateLimitOptions = JsonConvert.SerializeObject(fileConfiguration.GlobalConfiguration.RateLimitOptions);
+            dbGlobalConfig.ReRoutes = new List<ReRoute>();
+
+            // Reroutes
+            foreach (var model in fileConfiguration.ReRoutes)
+            {
+                var dbReroute = new ReRoute();
+                dbReroute.Id = Guid.NewGuid().ToString("N");
+                dbReroute.GlobalConfigurationId = dbGlobalConfig.Id;
+                dbReroute.CreatedTime = dbGlobalConfig.CreatedTime;
+                dbReroute.Enable = true;
+                dbReroute.AuthenticationOptions = JsonConvert.SerializeObject(model.AuthenticationOptions);
+                dbReroute.FileCacheOptions = JsonConvert.SerializeObject(model.FileCacheOptions);
+                dbReroute.DelegatingHandlers = JsonConvert.SerializeObject(model.DelegatingHandlers);
+                dbReroute.LoadBalancerOptions = JsonConvert.SerializeObject(model.LoadBalancerOptions);
+                dbReroute.QoSOptions = JsonConvert.SerializeObject(model.QoSOptions);
+                dbReroute.DownstreamHostAndPorts = JsonConvert.SerializeObject(model.DownstreamHostAndPorts);
+                dbReroute.HttpHandlerOptions = JsonConvert.SerializeObject(model.HttpHandlerOptions);
+                dbReroute.RateLimitOptions = JsonConvert.SerializeObject(model.RateLimitOptions);
+                dbReroute.DownstreamPathTemplate = model.DownstreamPathTemplate;
+                dbReroute.DownstreamScheme = model.DownstreamScheme;
+                dbReroute.Key = model.Key ?? "";
+                dbReroute.Priority = model.Priority;
+                dbReroute.RequestIdKey = model.RequestIdKey ?? "";
+                dbReroute.ServiceName = model.ServiceName ?? "";
+                dbReroute.UpstreamHost = model.UpstreamHost ?? "";
+                dbReroute.UpstreamHttpMethod = JsonConvert.SerializeObject(model.UpstreamHttpMethod);
+                dbReroute.UpstreamPathTemplate = model.UpstreamPathTemplate;
+                dbReroute.DownstreamHttpVersion = model.DownstreamHttpVersion;
+                dbGlobalConfig.ReRoutes.Add(dbReroute);
+            }
+
+            // Aggregates
+            var dbAggregates = _gatewayDbContext.Aggregates.Where(x => x.Enable).ToList();
+            dbAggregates.ForEach(x => x.Enable = false);
+            _gatewayDbContext.Aggregates.UpdateRange(dbAggregates);
+            dbAggregates = new List<Aggregates>();
+            foreach (var aggregate in fileConfiguration.Aggregates)
+            {
+                var dbAggregate = new Aggregates();
+                dbAggregate.Id = Guid.NewGuid().ToString("N");
+                dbAggregate.CreatedTime = dbGlobalConfig.CreatedTime;
+                dbAggregate.Enable = true;
+                dbAggregate.ReRouteKeys = JsonConvert.SerializeObject(aggregate.ReRouteKeys);
+                dbAggregate.ReRouteKeysConfig = JsonConvert.SerializeObject(aggregate.ReRouteKeysConfig);
+                dbAggregate.UpstreamPathTemplate = aggregate.UpstreamPathTemplate;
+                dbAggregate.UpstreamHost = aggregate.UpstreamHost;
+                dbAggregate.ReRouteIsCaseSensitive = aggregate.ReRouteIsCaseSensitive;
+                dbAggregate.Aggregator = aggregate.Aggregator;
+                dbAggregate.Priority = aggregate.Priority;
+                dbAggregates.Add(dbAggregate);
+            }
+            await _gatewayDbContext.GlobalConfiguration.AddAsync(dbGlobalConfig);
+            await _gatewayDbContext.Aggregates.AddRangeAsync(dbAggregates);
+
+            var changeCount = await _gatewayDbContext.SaveChangesAsync();
+
+            _changeTokenSource.Activate();
             return await Task.FromResult(new OkResponse());
         }
     }

@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Options;
 using Ocelot.Configuration;
 using Ocelot.Middleware;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Ocelot.Configuration.File;
 using Ocelot.Configuration.Creator;
 using Ocelot.Configuration.Repository;
 using Ocelot.DependencyInjection;
@@ -18,7 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Ocelot.Logging;
 using System.Diagnostics;
 
-namespace codebus.apigateway.core.Middleware
+namespace codebus.apigateway.core.OcelotAddin
 {
     public static class GatewayMiddleware
     {

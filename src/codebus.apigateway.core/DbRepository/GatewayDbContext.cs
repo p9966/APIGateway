@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using codebus.apigateway.core.DbRepository.Entities;
+using Microsoft.EntityFrameworkCore;
 
-namespace codebus.apigateway.core.Entities
+namespace codebus.apigateway.core.DbRepository
 {
     public class GatewayDbContext : DbContext
     {

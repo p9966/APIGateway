@@ -1,4 +1,4 @@
-﻿namespace codebus.apigateway.core.DependencyInjection
+﻿namespace codebus.apigateway.core.Model
 {
     public class GatewayConfiguration
     {

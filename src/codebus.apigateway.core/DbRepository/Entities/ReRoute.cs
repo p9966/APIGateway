@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
-namespace codebus.apigateway.core.Entities
+namespace codebus.apigateway.core.DbRepository.Entities
 {
     /// <summary>
     /// 网关路由
