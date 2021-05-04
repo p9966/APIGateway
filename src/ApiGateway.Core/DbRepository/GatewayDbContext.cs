@@ -1,7 +1,7 @@
-﻿using ApiGateway.Core.DbRepository.Entities;
+﻿using APIGateway.Core.DbRepository.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ApiGateway.Core.DbRepository
+namespace APIGateway.Core.DbRepository
 {
     public class GatewayDbContext : DbContext
     {

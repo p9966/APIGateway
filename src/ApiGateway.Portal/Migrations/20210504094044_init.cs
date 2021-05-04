@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ApiGateway.Portal.Migrations
+namespace APIGateway.Portal.Migrations
 {
     public partial class init : Migration
     {

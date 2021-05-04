@@ -1,6 +1,6 @@
-﻿using ApiGateway.Core.Model;
+﻿using APIGateway.Core.Model;
 
-namespace ApiGateway.Core.Common
+namespace APIGateway.Core.Common
 {
     public static class Extensions
     {

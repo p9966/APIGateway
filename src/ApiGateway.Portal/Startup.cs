@@ -1,6 +1,6 @@
-using ApiGateway.Core.Business;
-using ApiGateway.Core.DbRepository;
-using ApiGateway.Core.OcelotAddin;
+using APIGateway.Core.Business;
+using APIGateway.Core.DbRepository;
+using APIGateway.Core.OcelotAddin;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ocelot.DependencyInjection;
 
-namespace ApiGateway.Portal
+namespace APIGateway.Portal
 {
     public class Startup
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ApiGateway.Core.DbRepository.Entities
+namespace APIGateway.Core.DbRepository.Entities
 {
     /// <summary>
     /// 网关路由

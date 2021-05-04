@@ -1,15 +1,15 @@
-﻿using ApiGateway.Core.Model;
+﻿using APIGateway.Core.Model;
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using ApiGateway.Core.DbRepository;
+using APIGateway.Core.DbRepository;
 using System.Linq;
 using Ocelot.Configuration.Repository;
 using Newtonsoft.Json;
 using Ocelot.Configuration.File;
 using Ocelot.Configuration.Setter;
 
-namespace ApiGateway.Core.Business
+namespace APIGateway.Core.Business
 {
     public class GatewayServices : IGatewayContract
     {

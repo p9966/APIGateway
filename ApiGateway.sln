@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0858C000-AC4C-4E96-B1D4-8A7331A88FD5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGateway.Portal", "src\ApiGateway.Portal\ApiGateway.Portal.csproj", "{DD931BD3-2545-445A-81FE-022E8F889380}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIGateway.Portal", "src\APIGateway.Portal\APIGateway.Portal.csproj", "{DD931BD3-2545-445A-81FE-022E8F889380}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGateway.Core", "src\ApiGateway.Core\ApiGateway.Core.csproj", "{C424A6A7-BE40-437A-A8F4-398A87F4A6C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIGateway.Core", "src\APIGateway.Core\APIGateway.Core.csproj", "{C424A6A7-BE40-437A-A8F4-398A87F4A6C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

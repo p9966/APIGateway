@@ -1,4 +1,4 @@
-﻿using ApiGateway.Core.Model;
+﻿using APIGateway.Core.Model;
 using Microsoft.Extensions.Hosting;
 using Ocelot.Configuration.Creator;
 using Ocelot.Configuration.Repository;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ApiGateway.Core.OcelotAddin
+namespace APIGateway.Core.OcelotAddin
 {
     public class DBConfigurationPoller : IHostedService
     {

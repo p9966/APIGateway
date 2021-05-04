@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using System.Linq;
 using Newtonsoft.Json;
 using Microsoft.Extensions.DependencyInjection;
-using ApiGateway.Core.DbRepository;
-using ApiGateway.Core.DbRepository.Entities;
+using APIGateway.Core.DbRepository;
+using APIGateway.Core.DbRepository.Entities;
 using Ocelot.Configuration.ChangeTracking;
 
-namespace ApiGateway.Core.OcelotAddin
+namespace APIGateway.Core.OcelotAddin
 {
     public class MySqlFileConfigurationRepository : IFileConfigurationRepository
     {

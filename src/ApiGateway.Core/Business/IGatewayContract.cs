@@ -1,8 +1,8 @@
-﻿using ApiGateway.Core.Model;
+﻿using APIGateway.Core.Model;
 using Ocelot.Configuration.File;
 using System.Threading.Tasks;
 
-namespace ApiGateway.Core.Business
+namespace APIGateway.Core.Business
 {
     public interface IGatewayContract
     {

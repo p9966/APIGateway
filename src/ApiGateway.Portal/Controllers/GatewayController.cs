@@ -1,13 +1,13 @@
-﻿using ApiGateway.Core.Business;
-using ApiGateway.Core.Model;
+﻿using APIGateway.Core.Business;
+using APIGateway.Core.Model;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using ApiGateway.Core.Common;
+using APIGateway.Core.Common;
 using Ocelot.Configuration.File;
 
-namespace ApiGateway.Portal.Controllers
+namespace APIGateway.Portal.Controllers
 {
     [Route("[Controller]/[Action]")]
     public class GatewayController : ControllerBase

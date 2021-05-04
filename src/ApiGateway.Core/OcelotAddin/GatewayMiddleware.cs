@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Ocelot.Logging;
 using System.Diagnostics;
 
-namespace ApiGateway.Core.OcelotAddin
+namespace APIGateway.Core.OcelotAddin
 {
     public static class GatewayMiddleware
     {

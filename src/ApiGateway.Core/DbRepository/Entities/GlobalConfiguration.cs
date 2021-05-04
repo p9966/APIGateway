@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace ApiGateway.Core.DbRepository.Entities
+namespace APIGateway.Core.DbRepository.Entities
 {
     /// <summary>
     /// 网关全局配置

@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "ApiGateway.Portal": {
+    "APIGateway.Portal": {
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

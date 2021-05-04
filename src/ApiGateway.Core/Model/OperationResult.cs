@@ -1,4 +1,4 @@
-﻿namespace ApiGateway.Core.Model
+﻿namespace APIGateway.Core.Model
 {
     public class OperationResult
     {

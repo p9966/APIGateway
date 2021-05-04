@@ -1,11 +1,11 @@
-﻿using ApiGateway.Core.Model;
+﻿using APIGateway.Core.Model;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Ocelot.Configuration.Repository;
 using Ocelot.DependencyInjection;
 using System;
 
-namespace ApiGateway.Core.OcelotAddin
+namespace APIGateway.Core.OcelotAddin
 {
     public static class RepositoryExtension
     {

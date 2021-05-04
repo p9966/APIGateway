@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace ApiGateway.Portal
+namespace APIGateway.Portal
 {
     public class Program
     {
