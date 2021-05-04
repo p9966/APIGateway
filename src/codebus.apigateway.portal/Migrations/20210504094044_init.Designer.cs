@@ -9,7 +9,7 @@ using codebus.apigateway.core.Entities;
 namespace codebus.apigateway.portal.Migrations
 {
     [DbContext(typeof(GatewayDbContext))]
-    [Migration("20210503154705_init")]
+    [Migration("20210504094044_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,9 +38,6 @@ namespace codebus.apigateway.portal.Migrations
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
-
-                    b.Property<string>("ReRouteId")
-                        .HasColumnType("text");
 
                     b.Property<bool>("ReRouteIsCaseSensitive")
                         .HasColumnType("tinyint(1)");

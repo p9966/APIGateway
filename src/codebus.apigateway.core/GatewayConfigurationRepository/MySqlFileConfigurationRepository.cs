@@ -30,9 +30,9 @@ namespace codebus.apigateway.core.GatewayConfigurationRepository
             if (string.IsNullOrEmpty(dbGlobalConfig.BaseUrl))
                 throw new Exception("BaseUrl不可为空");
 
+            // Globalconfig
             var fileConfiguration = new FileConfiguration();
             var fileGlobalConfiguration = new FileGlobalConfiguration();
-
             fileGlobalConfiguration.BaseUrl = dbGlobalConfig.BaseUrl;
             fileGlobalConfiguration.DownstreamScheme = dbGlobalConfig.DownstreamScheme;
             fileGlobalConfiguration.RequestIdKey = dbGlobalConfig.RequestIdKey;
@@ -63,6 +63,7 @@ namespace codebus.apigateway.core.GatewayConfigurationRepository
             if (routeresult == null || routeresult.Count <= 0)
                 return await Task.FromResult(new OkResponse<FileConfiguration>(null));
 
+            // Reroutes
             var reroutelist = new List<FileReRoute>();
             foreach (var model in routeresult)
             {
@@ -103,7 +104,7 @@ namespace codebus.apigateway.core.GatewayConfigurationRepository
 
                 fileReroute.DownstreamPathTemplate = model.DownstreamPathTemplate;
                 fileReroute.DownstreamScheme = model.DownstreamScheme;
-                fileReroute.Key = model.RequestIdKey ?? "";
+                fileReroute.Key = model.Key ?? "";
                 fileReroute.Priority = model.Priority;
                 fileReroute.RequestIdKey = model.RequestIdKey ?? "";
                 fileReroute.ServiceName = model.ServiceName ?? "";
@@ -111,26 +112,27 @@ namespace codebus.apigateway.core.GatewayConfigurationRepository
                 fileReroute.UpstreamHttpMethod = JsonConvert.DeserializeObject<List<string>>(model.UpstreamHttpMethod);
                 fileReroute.UpstreamPathTemplate = model.UpstreamPathTemplate;
                 fileReroute.DownstreamHttpVersion = model.DownstreamHttpVersion;
-
-                var dbAggregate = _gatewayDbContext.Aggregates.FirstOrDefault(x => x.ReRouteId == model.Id && x.Enable);
-                if (dbAggregate != null)
-                {
-                    var aggregate = new FileAggregateReRoute();
-                    if (!string.IsNullOrEmpty(dbAggregate.ReRouteKeys))
-                        aggregate.ReRouteKeys = JsonConvert.DeserializeObject<List<string>>(dbAggregate.ReRouteKeys);
-                    if (!string.IsNullOrEmpty(dbAggregate.ReRouteKeysConfig))
-                        aggregate.ReRouteKeysConfig = JsonConvert.DeserializeObject<List<AggregateReRouteConfig>>(dbAggregate.ReRouteKeysConfig);
-                    aggregate.UpstreamPathTemplate = dbAggregate.UpstreamPathTemplate;
-                    aggregate.UpstreamHost = dbAggregate.UpstreamHost;
-                    aggregate.ReRouteIsCaseSensitive = dbAggregate.ReRouteIsCaseSensitive;
-                    aggregate.Aggregator = dbAggregate.Aggregator;
-                    aggregate.Priority = dbAggregate.Priority;
-
-                    fileConfiguration.Aggregates.Add(aggregate);
-                }
                 reroutelist.Add(fileReroute);
             }
             fileConfiguration.ReRoutes = reroutelist;
+
+            // Aggregates
+            var dbAggregates = _gatewayDbContext.Aggregates.Where(x => x.Enable);
+            foreach (var aggregate in dbAggregates)
+            {
+                var fileAggregate = new FileAggregateReRoute();
+                if (!string.IsNullOrEmpty(aggregate.ReRouteKeys))
+                    fileAggregate.ReRouteKeys = JsonConvert.DeserializeObject<List<string>>(aggregate.ReRouteKeys);
+                if (!string.IsNullOrEmpty(aggregate.ReRouteKeysConfig))
+                    fileAggregate.ReRouteKeysConfig = JsonConvert.DeserializeObject<List<AggregateReRouteConfig>>(aggregate.ReRouteKeysConfig);
+                fileAggregate.UpstreamPathTemplate = aggregate.UpstreamPathTemplate;
+                fileAggregate.UpstreamHost = aggregate.UpstreamHost;
+                fileAggregate.ReRouteIsCaseSensitive = aggregate.ReRouteIsCaseSensitive;
+                fileAggregate.Aggregator = aggregate.Aggregator;
+                fileAggregate.Priority = aggregate.Priority;
+                
+                fileConfiguration.Aggregates.Add(fileAggregate);
+            }
 
             if (fileConfiguration.ReRoutes == null || fileConfiguration.ReRoutes.Count <= 0)
                 return await Task.FromResult(new OkResponse<FileConfiguration>(null));

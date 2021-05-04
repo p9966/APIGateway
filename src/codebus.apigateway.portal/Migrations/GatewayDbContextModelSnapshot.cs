@@ -37,9 +37,6 @@ namespace codebus.apigateway.portal.Migrations
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
-                    b.Property<string>("ReRouteId")
-                        .HasColumnType("text");
-
                     b.Property<bool>("ReRouteIsCaseSensitive")
                         .HasColumnType("tinyint(1)");
 

@@ -9,7 +9,6 @@ namespace codebus.apigateway.core.Entities
     {
         [Key]
         public string Id { get; set; }
-        public string ReRouteId { get; set; }
         public string ReRouteKeys { get; set; }
         public string ReRouteKeysConfig { get; set; }
         public string UpstreamPathTemplate { get; set; }

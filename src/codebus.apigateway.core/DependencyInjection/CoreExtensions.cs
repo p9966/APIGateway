@@ -23,7 +23,7 @@ namespace codebus.apigateway.core.DependencyInjection
             services.AddOcelot().AddConfigurationRepository(option =>
             {
                 option.AutoUpdate = true;
-                option.UpdateInterval = 30 * 1000;
+                option.UpdateInterval = 10 * 1000;
             });
         }
 

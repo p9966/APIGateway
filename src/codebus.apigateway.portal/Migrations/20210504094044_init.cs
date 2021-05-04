@@ -12,7 +12,6 @@ namespace codebus.apigateway.portal.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    ReRouteId = table.Column<string>(nullable: true),
                     ReRouteKeys = table.Column<string>(nullable: true),
                     ReRouteKeysConfig = table.Column<string>(nullable: true),
                     UpstreamPathTemplate = table.Column<string>(nullable: true),
