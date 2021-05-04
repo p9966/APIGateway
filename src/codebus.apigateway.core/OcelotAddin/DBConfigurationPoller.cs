@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using codebus.apigateway.core.Model;
+using Microsoft.Extensions.Hosting;
 using Ocelot.Configuration.Creator;
 using Ocelot.Configuration.Repository;
 using Ocelot.Logging;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace codebus.apigateway.core.DependencyInjection
+namespace codebus.apigateway.core.OcelotAddin
 {
     public class DBConfigurationPoller : IHostedService
     {

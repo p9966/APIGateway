@@ -1,14 +1,13 @@
-using codebus.apigateway.core.DependencyInjection;
-using codebus.apigateway.core.Entities;
-using codebus.apigateway.core.Middleware;
+using codebus.apigateway.core.Business;
+using codebus.apigateway.core.DbRepository;
+using codebus.apigateway.core.OcelotAddin;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Reflection;
+using Ocelot.DependencyInjection;
 
 namespace codebus.apigateway.portal
 {
@@ -23,8 +22,21 @@ namespace codebus.apigateway.portal
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCore(Configuration);
             services.AddControllers();
+
+            services.AddDbContext<GatewayDbContext>(options =>
+            {
+                options.UseLazyLoadingProxies();
+                options.UseMySQL(Configuration["MySql:ConnectionString"]);
+            }, ServiceLifetime.Scoped);
+
+            services.AddOcelot().AddConfigurationRepository(option =>
+            {
+                option.AutoUpdate = false;
+                option.UpdateInterval = 10 * 1000;
+            });
+
+            services.AddScoped<IGatewayContract, GatewayServices>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -41,7 +53,7 @@ namespace codebus.apigateway.portal
                 opt.MapControllers();
             });
 
-            app.UseCore();
+            app.UseGateway().Wait();
         }
     }
 }

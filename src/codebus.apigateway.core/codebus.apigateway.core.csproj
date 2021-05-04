@@ -15,4 +15,8 @@
     <PackageReference Include="Ocelot" Version="15.0.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Business\Dtos\" />
+  </ItemGroup>
+
 </Project>
